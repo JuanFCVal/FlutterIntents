@@ -13,17 +13,18 @@ class PrinterTile extends StatelessWidget {
     PrinterConfigProvider printProvider =
         Provider.of<PrinterConfigProvider>(context);
     return InkWell(
-      onDoubleTap: !printProvider.testInProgress
-          ? () async {
-              final response = await printProvider.printReceip(printer);
-              // ignore: use_build_context_synchronously
-              UtilitiesSnackBar.showInformativeSnackBar(context, response);
-            }
-          : null,
+      onDoubleTap: () {
+        print("Printer selected: ${printer.ip}");
+        !printProvider.testInProgress
+            ? () async {
+                final response = await printProvider.printReceip(printer);
+                // ignore: use_build_context_synchronously
+                UtilitiesSnackBar.showInformativeSnackBar(context, response);
+              }
+            : null;
+      },
       child: Container(
-          height: 80,
-          width: MediaQuery.of(context).size.width * 0.40,
-          margin: const EdgeInsets.symmetric(vertical: 5),
+          margin: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
@@ -35,46 +36,23 @@ class PrinterTile extends StatelessWidget {
               ),
             ],
           ),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      printer.ip,
-                      style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                    Text(printer.name ?? printer.ip,
-                        style: const TextStyle(fontSize: 10)),
-                  ],
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  printer.ip,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-              ),
-              printer.state == 0
-                  ? IconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        printProvider.addFromAvailableToConfigured(printer);
-                      },
-                    )
-                  : printer.state == 1
-                      ? IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            printProvider
-                                .removeFromConfiguredToAvailable(printer);
-                          },
-                        )
-                      : IconButton(
-                          icon: const Icon(Icons.check),
-                          onPressed: () {
-                            printProvider
-                                .removeFromConfiguredToAvailable(printer);
-                          },
-                        ),
-            ],
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(printer.name ?? printer.ip,
+                    style: const TextStyle(fontSize: 14)),
+              ],
+            ),
           )
 
           // ListTile(

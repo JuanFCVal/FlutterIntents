@@ -33,6 +33,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_background_service: ^2.1.3
+  geolocator: ^9.0.1
+  network_info_plus: ^2.1.4+1
   pos_printer_manager: ^0.0.5
   provider: ^6.0.3
   receive_sharing_intent: ^1.4.5

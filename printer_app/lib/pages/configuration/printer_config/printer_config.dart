@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'printer_page_provider.dart';
 import 'widgets/printer_tile.dart';
+import 'widgets/wifi_data.dart';
 
 class PrinterPageConfiguration extends StatelessWidget {
   const PrinterPageConfiguration({Key? key}) : super(key: key);
@@ -20,58 +21,33 @@ class PrinterPageConfiguration extends StatelessWidget {
             height: MediaQuery.of(context).size.height,
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: const [
-                    Text("Impresoras disponibles"),
-                    Text("Mis impresoras"),
-                  ],
-                ),
+                const WifiInformation(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  child: Column(
                     children: [
-                      SingleChildScrollView(
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.9,
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              printProvider.loadingPrinters
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: const [
-                                        CircularProgressIndicator(),
-                                      ],
-                                    )
-                                  : Container(),
-                              ...printProvider.availablePrinters
-                                  .map((i) => PrinterTile(printer: i))
-                                  .toList(),
-                            ],
-                          ),
-                        ),
+                      const SizedBox(
+                        height: 20,
                       ),
-                      SingleChildScrollView(
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.9,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              ...printProvider.configuredPrinters
-                                  .map((i) => PrinterTile(printer: i))
-                                  .toList()
-                            ],
-                          ),
-                        ),
-                      )
+                      Text(
+                          printProvider.availablePrinters.isEmpty
+                              ? "Presiona buscar para comenzar :)"
+                              : "Impresoras disponibles",
+                          style: Theme.of(context).textTheme.headline6),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      printProvider.loadingPrinters
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                CircularProgressIndicator(),
+                              ],
+                            )
+                          : Container(),
+                      ...printProvider.availablePrinters
+                          .map((i) => PrinterTile(printer: i))
+                          .toList(),
                     ],
                   ),
                 ),
